@@ -1,0 +1,360 @@
+
+<?php
+
+    include('../includes/dbconnection.php');
+    include('../includes/session.php');
+    error_reporting(0);
+
+// $lev = $_GET["level"];
+    // $qryterm = mysqli_query($con,"SELECT * FROM tblterm WHERE id='$_GET[termId]'");
+
+    // $qrystd = mysqli_query($con,"SELECT * FROM tblstudent WHERE Id='$_GET[Id]'");
+
+    // $qryfee = mysqli_query($con,"SELECT * FROM tblfees WHERE fee_id='$_GET[fee_id]'");
+
+    // $qrysession = mysqli_query($con,"SELECT * FROM tblsession WHERE Id='$_GET[sessionId]'");
+
+
+    $qry=mysqli_query($con,"SELECT tblstudent.firstName,tblstudent.lastName,tblstudent.otherName,tblsession.sessionName,tblterm.termName,tbllevel.levelName,tblfees.fee_amount,tblfees.feeMonth,tblfeepayment.feePaid,tblfeepayment.dueAmount,tblfeepayment.dateCreated,tblfeepayment.sessionId,tblfeepayment.studentId,tblfeetype.feeName FROM tblfeepayment 
+    JOIN tblstudent ON tblstudent.sid = tblfeepayment.studentId
+    JOIN tblsession ON tblsession.Id = tblfeepayment.sessionId
+    JOIN tblterm ON tblterm.id = tblfeepayment.termId
+    JOIN tbllevel ON tbllevel.Id = tblfeepayment.classId
+    JOIN tblfeetype ON tblfeetype.Id = tblfeepayment.feeTypeId
+    JOIN tblfees ON tblfees.fee_id = tblfeepayment.feeId WHERE tblfeepayment.Id='$_GET[Id]'");
+
+    if($qry == false){
+        header("location: viewFees.php");
+        // echo mysqli_error($con);
+    }
+
+    // $rowterm = mysqli_fetch_assoc($qryterm);
+
+    // $rowstd = mysqli_fetch_assoc($qrystd);
+    
+
+    // $rowfee = mysqli_fetch_assoc($qryfee);
+    
+
+    $rowpayment = mysqli_fetch_assoc($qry);
+    $classExplode = explode(" ", $rowpayment['levelName']);
+    $lev = $classExplode[0];
+
+    // echo "<script>alert('$lev')</script>";
+
+
+
+
+if(isset($_POST['update'])){
+
+     $alertStyle ="";
+      $statusMsg="";
+    // student
+    $studentId = $rowpayment["studentId"];
+    $feeId=$rowpayment["feeId"];
+    $sessionId=$rowpayment['sessionId'];
+    $feeAmount=$_POST['fee_amount'];
+    $paidAmount = $_POST['feePaid'];
+    // $dueAmount = $_POST['dueAmount'];
+
+
+    $dateCreated = date("Y-m-d");
+
+
+ 
+    $query=mysqli_query($con,"SELECT * FROM tblfeepayment WHERE Id ='$_GET[Id]'");
+    $ret=mysqli_fetch_assoc($query);
+    if($ret > 0){
+
+        $query=mysqli_query($con,"UPDATE tblfeepayment SET feePaid=feePaid+$paidAmount, dueAmount=dueAmount-$paidAmount WHERE Id='$_GET[Id]'");
+
+        if ($query) {
+
+            $alertStyle ="alert alert-success";
+            $statusMsg="Fee Updated Successfully!";
+            echo "
+            <script>
+                confirm('Succesful Updated Fee');
+                window.location = (\"viewFees.php\")
+            </script>
+            ";
+            // header("location: collectStudentFee.php?Id=$rowstd[Id]&levelId=$_GET[levelId]&sessionId=$rowsession[Id]");
+        }
+        else
+        {
+            $alertStyle ="alert alert-danger";
+            $statusMsg="An error Occurred!" . mysqli_error($con);
+        }
+
+    }
+    else{
+
+        
+        $alertStyle ="alert alert-danger";
+        $statusMsg="Error Occured!";
+    }
+    
+
+   
+   
+}
+  ?>
+
+<!-- Head -->
+<?php include 'includes/title.php';?>
+
+
+<script>
+function showValues(str) {
+    if (str == "") {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else { 
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET","ajaxCall2.php?fid="+str,true);
+        xmlhttp.send();
+    }
+}
+</script>
+</head>
+<body>
+    <!-- Left Panel -->
+    <?php $page="fee"; include 'includes/leftMenu.php';?>
+
+   <!-- /#left-panel -->
+
+    <!-- Left Panel -->
+
+    <!-- Right Panel -->
+
+    <div id="right-panel" class="right-panel">
+
+        <!-- Header-->
+            <?php include 'includes/header.php';?>
+        <!-- /header -->
+        <!-- Header-->
+
+        <div class="breadcrumbs">
+            <div class="breadcrumbs-inner">
+                <div class="row m-0">
+                    <div class="col-sm-4">
+                        <div class="page-header float-left">
+                            <div class="page-title">
+                                <h1>Dashboard</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="page-header float-right">
+                            <div class="page-title">
+                                <ol class="breadcrumb text-right">
+								<!-- Log on to codeastro.com for more projects! -->
+                                    <li><a href="#">Dashboard</a></li>
+                                    <li><a href="#">Fee</a></li>
+                                    <li class="active">Edit Fee Payment</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="breadcrumbs" style="background-color: transparent;">
+            <div class="breadcrumbs-inner">
+                <div class="row m-0">
+                    <div class="col-sm-4">
+                        <div class="page-header float-left">
+                            <div class="page-title">
+                                <h1><a href="viewFees.php"><button class="btn btn-dark">Back</button></a></h1>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <strong class="card-title"><h2 align="center">Edit <strong><?php echo $rowpayment['firstName'].' '.$rowpayment['lastName'].' '.$rowpayment['otherName'] . ' ' . $rowpayment['feeName']  ?></strong></h2></strong>
+                            </div>
+                            <div class="card-body">
+                                <!-- Credit Card -->
+                                <div id="pay-invoice">
+                                    <div class="card-body">
+                                       <div class="<?php echo $alertStyle;?>" role="alert"><?php echo $statusMsg;?></div>
+                                        <form method="Post" action="" autocomplete="off">
+                                            <h2>Student Fee Information</h2>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group">
+													<!-- Log on to codeastro.com for more projects! -->
+                                                        <label for="cc-exp" class="control-label mb-1">Fee Type <span style="color: red;">*</span></label>
+                                                        <input id="" name="feeType" value="<?php echo $rowpayment['feeName']  ?>" type="text" class="form-control cc-exp" value="" Required data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="Fee Type" autocomplete="off" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+												<!-- Log on to codeastro.com for more projects! -->
+                                                    <label for="x_card_code" class="control-label mb-1">Session<span style="color: red;">*</span></label>
+                                                        <input id="" name="session" value="<?php echo $rowpayment['sessionName']  ?>" type="text" class="form-control cc-cvc" value="" Required data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" placeholder="Lastname" autocomplete="off" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+
+                                                    <div class="row">
+                                           
+                                           <div class="col-md-6 col-sm-12">
+                                               <div class="form-group">
+                                                    <label for="x_card_code" class="control-label mb-1">Term <span style="color: red;">*</span></label>
+                                                    <input id="" name="othername" value="<?php echo $rowpayment['termName']  ?>" type="text" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="Term" readonly>
+                                               </div>
+                                           </div>
+                                           <?php 
+                                               if($lev == "KG" || $lev == "Nursery" || $lev == "Creche"){
+
+                                               
+                                           ?>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="form-group">
+                                                    <label for="x_card_code" class="control-label mb-1">Month <span style="color: red;">*</span></label>
+                                                    <input id="" name="othername" value="<?php echo $rowpayment['feeMonth']  ?>" type="text" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="Term" readonly>
+                                                </div>
+                                           </div>
+                                           <?php } ?>
+                                       </div> 
+                                            
+
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group">
+													<!-- Log on to codeastro.com for more projects! -->
+                                                        <label for="cc-exp" class="control-label mb-1">Due Amount</label>
+                                                        <input id="" name="dueAmount" value="<?php echo $rowpayment['dueAmount']  ?>" type="text" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="Fee Amount" readonly>
+                                                    </div>
+                                                </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="form-group">
+                                                    <label for="x_card_code" class="control-label mb-1">Fee Paid <span style="color: red;">*</span></label>
+                                                    <input id="feePaid" name="feePaid" autofocus  type="text" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="Fee Paid" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php 
+                                                if($lev == "KG"){
+
+                                                
+                                            ?>
+
+                                        <div class="row">
+                                           
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="form-group">
+                                                     <label for="x_card_code" class="control-label mb-1">Term <span style="color: red;">*</span></label>
+                                                     <input id="" name="othername" value="<?php echo $rowpayment['termName']  ?>" type="text" class="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="Term" readonly>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <?php } ?>
+                                         <div class="row">
+                                                
+                                                </div>
+                                                <!-- <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group">
+                                                   <?php
+                                                        //echo"<div id='txtHint'></div>";
+                                                    ?>                                    
+                                                    </div>
+                                                 
+                                                </div> -->
+                                                
+                                             </div>
+                                             
+
+                                             
+                                             
+											 <!-- Log on to codeastro.com for more projects! -->
+                                             
+                                                <button type="submit" name="update" class="btn btn-primary">Update Payment</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- .card -->
+                    </div><!--/.col-->
+               
+
+                
+<!-- end of datatable -->
+
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+
+    <div class="clearfix"></div>
+
+        <?php include 'includes/footer.php';?>
+
+
+
+    <script type="text/javascript">
+        
+
+            // $("#feePaid").keyup(function (e) { 
+            //     $("#dueAmount").val()-$("#feePaid").val();
+            //     var fP = $("#feePaid").val();
+            //     var feeAmt = $("#dueAmount").val();
+                
+            //     var feeBalance = feeAmt - fP;
+            //     $("#dueAmount").val(feeBalance).fx;
+            // });
+            // var feeAmt = $("#dueAmount").val();
+            // updateBalance(feeAmt);
+            // function updateBalance(balance){
+            //     $("#dueAmount").val(balance.toFixed);
+            // }
+            // $("#feePaid").on("input", function () {
+
+            //     // $("#dueAmount").val()-$("#feePaid").val();
+            //     var fP = parseFloat( $("#feePaid").val());
+            //     var feeAmt = $("#dueAmount").val();
+            //     if($("#feePaid").val() != ""){
+            //         var feeBalance = feeAmt - fP;
+            //     }
+                
+                
+                
+            //     // var feeBalance = feeAmt - fP;
+            //     $("#dueAmount").val(feeBalance.toFixed(2));
+            // });
+            let numbers = "1234567890.";
+            $("#feePaid").on("input", function () { 
+                $(this).val($(this).val().replace(/[^0-9.]/g, ''));
+                
+                // Ensure only one decimal point
+                if ($(this).val().split('.').length > 2) {
+                    $(this).val($(this).val().substring(0, $(this).val().lastIndexOf('.')));
+                }
+                
+            });
+      
+  </script>
+
+</body>
+</html>
