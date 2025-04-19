@@ -6,9 +6,10 @@ include('dbconnection.php');
 // ini_set('session.cookie_lifetime',300);
 // exit();
 
-if (isset($_SESSION['emailAddress']))
+if (isset($_SESSION['emailAddress']) || isset($_SESSION['firstName']))
 {
     $emailAddress = $_SESSION['emailAddress'];
+   
   //   if(time() - $_SESSION["SESS_LOGIN_TIME"] > 600){
   //     session_unset();
   //     session_destroy();
@@ -22,9 +23,10 @@ if (isset($_SESSION['emailAddress']))
 
 
 else{
-  echo "<script type = \"text/javascript\">
-  window.location = (\"../index.php\");
-  </script>";
+  header("Location: ../SuperAdmin/logout.php");
+  // echo "<script type = \"text/javascript\">
+  // window.location = (\"../index.php\");
+  // </script>";
 
 }
 

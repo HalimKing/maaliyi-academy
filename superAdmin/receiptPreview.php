@@ -8,15 +8,15 @@
     if(isset($_GET["feeId"])){
         $id = $_GET["feeId"];
         $sqp = mysqli_query($con,"SELECT tblstudent.firstName,tblstudent.lastName,tblstudent.otherName,tblsession.sessionName,tblterm.termName,tbllevel.levelName,tblfees.fee_amount,tblfees.feeMonth,tblfeepayment.feePaid,tblfeepayment.dueAmount,tblfeepayment.dateCreated,tblfeetype.feeName, tblfeepayment.studentId FROM tblfeepayment 
-        JOIN tblsession ON tblsession.Id = tblfeepayment.sessionId
-        JOIN tblstudent ON tblstudent.sid = tblfeepayment.studentId
-        JOIN tblterm ON tblterm.id = tblfeepayment.termId
-        JOIN tbllevel ON tbllevel.Id = tblfeepayment.classId
-        JOIN tblfeetype ON tblfeetype.Id = tblfeepayment.feeTypeId
-        JOIN tblfees ON tblfees.fee_id = tblfeepayment.feeId WHERE tblfeepayment.Id='$id'");
+        LEFT JOIN tblsession ON tblsession.Id = tblfeepayment.sessionId
+        LEFT JOIN tblstudent ON tblstudent.sid = tblfeepayment.studentId
+        LEFT JOIN tblterm ON tblterm.id = tblfeepayment.termId
+        LEFT JOIN tbllevel ON tbllevel.Id = tblfeepayment.classId
+        LEFT JOIN tblfeetype ON tblfeetype.Id = tblfeepayment.feeTypeId
+        LEFT JOIN tblfees ON tblfees.fee_id = tblfeepayment.feeId WHERE tblfeepayment.Id='$id'");
         if($sqp == true){
             $rowPay = mysqli_fetch_array($sqp);
-            echo $rowPay["feeName"];
+            // echo $rowPay["feeName"];
             // return false;
         }else{
             echo "
@@ -136,7 +136,6 @@ function showValues(str) {
                         <div class="page-header float-right">
                             <div class="page-title">
                                 <ol class="breadcrumb text-right">
-								<!-- Log on to codeastro.com for more projects! -->
                                     <li><a href="#">Dashboard</a></li>
                                     <li><a href="#">Fee</a></li>
                                     <li class="active">Print Fee</li>
@@ -163,7 +162,6 @@ function showValues(str) {
                             <div class="page-title">
                                 <ol class="breadcrumb text-right">
                                
-								<!-- Log on to codeastro.com for more projects! -->
                                 <li><a href="" id="print" ><button class="btn btn-success">Print</button></a></li>
                                 <li>
                                     <form id="receiptForm">
@@ -364,29 +362,30 @@ function showValues(str) {
             }
 
             function submitForm() {
+
                 
                 $.ajax({
                     type: 'POST',
                     url: 'receiptFormSubmit.php',
-                    data: $('#receiptForm').serialize(), // Serialize form data
-                    // contentType: false,
-                    // processData: false,
-                    success: function(response){
-                        // Handle success
+                    data: $('#receiptForm').serialize(),
+                    success: function(res) {
+                        console.log('response:', res);
+                        return true;
                         
-                        var res = $.parseJSON(response);
-                        
-                        if (res.status == 'success') {
-                            console.log(res.message);
-                        }else if(res.status == 'fail') {
-                            console.log(res.message);
-                    }
+                        if (res.status === 'success') {
+                            alert('Success: ' + res.message);
+                        } else if (res.status === 'fail') {
+                            alert('Failed: ' + res.message);
+                        }
                     },
-                    error: function(xhr, status, error){
-                        // Handle error
-                        alert('Form submission failed: ' + error);
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
                     }
+
                 });
+
+
+
             }
             $('#print').click(function(event){
                 event.preventDefault(); // Prevent default anchor behavior

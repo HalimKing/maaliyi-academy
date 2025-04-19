@@ -247,29 +247,29 @@ function showLecturer(str) {
                                                 
                                                 if( $splitLevel[0] === "Primary"){
                                                     $query = mysqli_query($con, "SELECT tblfees.fee_id,tblfees.fee_amount,tblfees.sessionId,tblfees.termId,tblsession.sessionName,tblfeetype.feeName,tblfees.feeNameId,tblterm.termName FROM tblfees 
-                                                    JOIN tblsession ON tblsession.Id = tblfees.sessionId
-                                                    JOIN tblterm ON tblterm.id = tblfees.termId
-                                                    JOIN tblfeetype ON tblfeetype.Id = tblfees.feeNameId
+                                                    LEFT JOIN tblsession ON tblsession.Id = tblfees.sessionId
+                                                    LEFT JOIN tblterm ON tblterm.id = tblfees.termId
+                                                    LEFT JOIN tblfeetype ON tblfeetype.Id = tblfees.feeNameId
                                                     WHERE level='Primary' ORDER BY tblsession.sessionName ASC");
                                                 }elseif($splitLevel[0] === "KG"){
                                                     $query = mysqli_query($con, "SELECT tblfees.fee_id,tblfees.fee_amount,tblfees.sessionId,tblfees.termId,tblsession.sessionName,tblfeetype.feeName,tblfees.feeNameId,tblfees.feeMonth
                                                     FROM tblfees
-                                                    JOIN tblsession ON tblsession.Id = tblfees.sessionId
-                                                    JOIN tblfeetype ON tblfeetype.Id = tblfees.feeNameId
+                                                    LEFT JOIN tblsession ON tblsession.Id = tblfees.sessionId
+                                                    LEFT JOIN tblfeetype ON tblfeetype.Id = tblfees.feeNameId
                                                     WHERE level='KG' ORDER BY tblsession.sessionName ASC");
 
                                                 }elseif($splitLevel[0] === "Nursery"){
                                                     $query = mysqli_query($con, "SELECT tblfees.fee_id,tblfees.fee_amount,tblfees.sessionId,tblfees.termId,tblsession.sessionName,tblfeetype.feeName,tblfees.feeNameId,tblfees.feeMonth
                                                     FROM tblfees
-                                                    JOIN tblsession ON tblsession.Id = tblfees.sessionId
-                                                    JOIN tblfeetype ON tblfeetype.Id = tblfees.feeNameId
+                                                    LEFT JOIN tblsession ON tblsession.Id = tblfees.sessionId
+                                                    LEFT JOIN tblfeetype ON tblfeetype.Id = tblfees.feeNameId
                                                     WHERE level='Nursery' ORDER BY tblsession.sessionName ASC");
 
                                                 }elseif($splitLevel[0] === "Creche"){
                                                     $query = mysqli_query($con, "SELECT tblfees.fee_id,tblfees.fee_amount,tblfees.sessionId,tblfees.termId,tblsession.sessionName,tblfeetype.feeName,tblfees.feeNameId,tblfees.feeMonth
                                                     FROM tblfees
-                                                    JOIN tblsession ON tblsession.Id = tblfees.sessionId
-                                                    JOIN tblfeetype ON tblfeetype.Id = tblfees.feeNameId
+                                                    LEFT JOIN tblsession ON tblsession.Id = tblfees.sessionId
+                                                    LEFT JOIN tblfeetype ON tblfeetype.Id = tblfees.feeNameId
                                                     WHERE level='Creche' ORDER BY tblsession.sessionName ASC");
 
                                                 }

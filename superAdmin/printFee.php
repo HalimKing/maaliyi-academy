@@ -15,20 +15,20 @@
     }
 
     $query = mysqli_query($con,"SELECT tblstudent.firstName,tblstudent.lastName,tblstudent.otherName,tblsession.sessionName,tblterm.termName,tbllevel.levelName,tblfees.fee_amount,tblfees.feeMonth,tblfeepayment.feePaid,tblfeepayment.dueAmount,tblfeepayment.dateCreated,tblfeetype.feeName FROM tblfeepayment 
-    JOIN tblstudent ON tblstudent.sid = tblfeepayment.studentId
-    JOIN tblsession ON tblsession.Id = tblfeepayment.sessionId
-    JOIN tblterm ON tblterm.id = tblfeepayment.termId
-    JOIN tbllevel ON tbllevel.Id = tblfeepayment.classId
-    JOIN tblfeetype ON tblfeetype.Id = tblfeepayment.feeTypeId
-    JOIN tblfees ON tblfees.fee_id = tblfeepayment.feeId WHERE tblfeepayment.studentId='$_GET[studentId]'");
+    LEFT JOIN tblstudent ON tblstudent.sid = tblfeepayment.studentId
+    LEFT JOIN tblsession ON tblsession.Id = tblfeepayment.sessionId
+    LEFT JOIN tblterm ON tblterm.id = tblfeepayment.termId
+    LEFT JOIN tbllevel ON tbllevel.Id = tblfeepayment.classId
+    LEFT JOIN tblfeetype ON tblfeetype.Id = tblfeepayment.feeTypeId
+    LEFT JOIN tblfees ON tblfees.fee_id = tblfeepayment.feeId WHERE tblfeepayment.studentId='$_GET[studentId]'");
 
     $sql = mysqli_query($con,"SELECT tblstudent.firstName,tblstudent.lastName,tblstudent.otherName,tblsession.sessionName,tblterm.termName,tbllevel.levelName,tblfees.fee_amount,tblfees.feeMonth,tblfeepayment.feePaid,tblfeepayment.dueAmount,tblfeepayment.dateCreated,tblfeetype.feeName FROM tblfeepayment 
-    JOIN tblstudent ON tblstudent.sid = tblfeepayment.studentId
-    JOIN tblsession ON tblsession.Id = tblfeepayment.sessionId
-    JOIN tblterm ON tblterm.id = tblfeepayment.termId
-    JOIN tbllevel ON tbllevel.Id = tblfeepayment.classId
-    JOIN tblfeetype ON tblfeetype.Id = tblfeepayment.feeTypeId
-    JOIN tblfees ON tblfees.fee_id = tblfeepayment.feeId WHERE tblfeepayment.studentId='$_GET[studentId]' AND tblsession.sessionName='$_GET[year]' AND tbllevel.levelName='$_GET[level]'");
+    LEFT JOIN tblstudent ON tblstudent.sid = tblfeepayment.studentId
+    LEFT JOIN tblsession ON tblsession.Id = tblfeepayment.sessionId
+    LEFT JOIN tblterm ON tblterm.id = tblfeepayment.termId
+    LEFT JOIN tbllevel ON tbllevel.Id = tblfeepayment.classId
+    LEFT JOIN tblfeetype ON tblfeetype.Id = tblfeepayment.feeTypeId
+    LEFT JOIN tblfees ON tblfees.fee_id = tblfeepayment.feeId WHERE tblfeepayment.studentId='$_GET[studentId]' AND tblsession.sessionName='$_GET[year]' AND tbllevel.levelName='$_GET[level]'");
 
     
     if($sql == true){

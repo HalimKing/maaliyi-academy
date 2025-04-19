@@ -47,6 +47,7 @@ $staffFullName = $row['firstName'].' '.$row['lastName'];
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-plus"></i> <a href="createStudent.php">Add New Student</a></li>
                             <li><i class="fa fa-eye"></i> <a href="viewStudent.php">View Student</a></li>
+                            <li><i class="fa-regular fa-circle-dot"></i> <a href="promoteStudent.php">Promote Students</a></li>
                         </ul>
                     </li>
 
@@ -85,7 +86,7 @@ $staffFullName = $row['firstName'].' '.$row['lastName'];
                     <li class="menu-title">Fees</li>
                       <li class="menu-item-has-children dropdown <?php if($page=='fee'){ echo 'active'; }?>">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Fees</a>
+                            aria-expanded="false"><i class="menu-icon fa-solid fa-money-bill"></i> Fees</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-plus"></i> <a href="fee.php">Create Fees</a></li>
                             <li><i class="fa fa-download" aria-hidden="true"> </i> <a href="collectFees.php">Collect Fees</a></li>

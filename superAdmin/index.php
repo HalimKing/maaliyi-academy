@@ -96,7 +96,7 @@
                                         <span class="currency float-left mr-1"></span>
                                         <span class="count"><?php echo $countAllLevel;?></span>
                                     </h3>
-                                    <p class="text-light mt-1 m-0">Class</p><!-- Log on to codeastro.com for more projects! -->
+                                    <p class="text-light mt-1 m-0">Class</p>
                                 </div><!-- /.card-left -->
 
                                 <div class="card-right float-right text-right">
@@ -171,9 +171,6 @@
                         </div>
                     </div>
 
-
-
-                    
 
 
 

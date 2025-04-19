@@ -10,10 +10,13 @@
 
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-
     
+    <!-- Boottrap 5.3.2 -->
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap-grid.css">
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap-grid.css.map">
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap-grid.min.css">
@@ -21,6 +24,7 @@
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap-reboot.min.css.map">
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css.map">
+
 
     <link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
     <link rel="shortcut icon" href="./img/maaliyiri.jpg" />
@@ -45,4 +49,18 @@
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../assets/dist/responsive.css">
-    
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+      .promote-container{
+        transition:  0.6s;
+
+      }
+      #select-all,
+      .select-checkbox{
+        transform: scale(1.5);
+        margin-left: 10px;
+      }
+    </style>
+

@@ -317,12 +317,12 @@ function Clickheretoprint()
                                                 $sid = $row["studentId"];
                                                 $totalDueAmount = 0;
                                                 $qry=mysqli_query($con,"SELECT tblstudent.firstName,tblstudent.lastName,tblstudent.otherName,tblsession.sessionName,tblterm.termName,tbllevel.levelName,tblfees.fee_amount,tblfees.feeMonth,tblfeepayment.feePaid,tblfeepayment.month,tblfeepayment.dueAmount,tblfeepayment.Id,tblfeepayment.classId,tblfeepayment.dateCreated,tblfeetype.feeName,tblfeepayment.studentId,tblstudent.sid  FROM tblfeepayment 
-                                                JOIN tblstudent ON tblstudent.sid = tblfeepayment.studentId
-                                                JOIN tblsession ON tblsession.Id = tblfeepayment.sessionId
-                                                JOIN tblterm ON tblterm.id = tblfeepayment.termId
-                                                JOIN tbllevel ON tbllevel.Id = tblfeepayment.classId
-                                                JOIN tblfeetype ON tblfeetype.Id = tblfeepayment.feeTypeId
-                                                JOIN tblfees ON tblfees.fee_id = tblfeepayment.feeId 
+                                                LEFT JOIN tblstudent ON tblstudent.sid = tblfeepayment.studentId
+                                                LEFT JOIN tblsession ON tblsession.Id = tblfeepayment.sessionId
+                                                LEFT JOIN tblterm ON tblterm.id = tblfeepayment.termId
+                                                LEFT JOIN tbllevel ON tbllevel.Id = tblfeepayment.classId
+                                                LEFT JOIN tblfeetype ON tblfeetype.Id = tblfeepayment.feeTypeId
+                                                LEFT JOIN tblfees ON tblfees.fee_id = tblfeepayment.feeId 
                                                 WHERE tblfeepayment.studentId='$sid' AND tblfeepayment.classId='$classId' AND tblfeepayment.sessionId='$sessionId' AND tblfeepayment.feeTypeId='$feeNameId'
                                                 GROUP BY tblfeepayment.studentId
                                                 ");

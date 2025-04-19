@@ -277,12 +277,12 @@ function showLecturer(str) {
                                             
 
                                                     $ret=mysqli_query($con,"SELECT tblstudent.firstName,tblstudent.lastName,tblstudent.otherName,tblsession.sessionName,tblterm.termName,tbllevel.levelName,tblfees.fee_amount,SUM(tblfees.fee_amount) as totalFeeAmount,tblfeepayment.feePaid,SUM(tblfeepayment.feePaid) as totalAmountPaid,tblfeepayment.month,tblfeepayment.dueAmount,SUM(tblfeepayment.dueAmount) as totalDueAmount,tblfeepayment.Id,tblfeepayment.dateCreated,tblfeetype.feeName,tblfeepayment.studentId,tblstudent.sid  FROM tblfeepayment 
-                                                    JOIN tblstudent ON tblstudent.sid = tblfeepayment.studentId
-                                                    JOIN tblsession ON tblsession.Id = tblfeepayment.sessionId
-                                                    JOIN tblterm ON tblterm.id = tblfeepayment.termId
-                                                    JOIN tbllevel ON tbllevel.Id = tblfeepayment.classId
-                                                    JOIN tblfeetype ON tblfeetype.Id = tblfeepayment.feeTypeId
-                                                    JOIN tblfees ON tblfees.fee_id = tblfeepayment.feeId
+                                                    LEFT JOIN tblstudent ON tblstudent.sid = tblfeepayment.studentId
+                                                    LEFT JOIN tblsession ON tblsession.Id = tblfeepayment.sessionId
+                                                    LEFT JOIN tblterm ON tblterm.id = tblfeepayment.termId
+                                                    LEFT JOIN tbllevel ON tbllevel.Id = tblfeepayment.classId
+                                                    LEFT JOIN tblfeetype ON tblfeetype.Id = tblfeepayment.feeTypeId
+                                                    LEFT JOIN tblfees ON tblfees.fee_id = tblfeepayment.feeId
                                                     WHERE tblfeepayment.sessionId='$sessionId'  AND tblfeepayment.classId='$classId' AND tblfeepayment.feeTypeId='$feeNameId' 
                                                     GROUP BY tblfeepayment.studentId,tblsession.sessionName,tbllevel.levelName");
 
@@ -296,12 +296,12 @@ function showLecturer(str) {
                                                 
                                             }else{
                                                 $ret=mysqli_query($con,"SELECT tblstudent.firstName,tblstudent.lastName,tblstudent.otherName,tblsession.sessionName,tblterm.termName,tbllevel.levelName,tblfees.fee_amount,SUM(tblfees.fee_amount) as totalFeeAmount,tblfeepayment.feePaid,SUM(tblfeepayment.feePaid) as totalAmountPaid,tblfeepayment.month,tblfeepayment.dueAmount,SUM(tblfeepayment.dueAmount) as totalDueAmount,tblfeepayment.Id,tblfeepayment.dateCreated,tblfeetype.feeName,tblfeepayment.studentId,tblstudent.sid  FROM tblfeepayment 
-                                                JOIN tblstudent ON tblstudent.sid = tblfeepayment.studentId
-                                                JOIN tblsession ON tblsession.Id = tblfeepayment.sessionId
-                                                JOIN tblterm ON tblterm.id = tblfeepayment.termId
-                                                JOIN tbllevel ON tbllevel.Id = tblfeepayment.classId
-                                                JOIN tblfeetype ON tblfeetype.Id = tblfeepayment.feeTypeId
-                                                JOIN tblfees ON tblfees.fee_id = tblfeepayment.feeId 
+                                                LEFT JOIN tblstudent ON tblstudent.sid = tblfeepayment.studentId
+                                                LEFT JOIN tblsession ON tblsession.Id = tblfeepayment.sessionId
+                                                LEFT JOIN tblterm ON tblterm.id = tblfeepayment.termId
+                                                LEFT JOIN tbllevel ON tbllevel.Id = tblfeepayment.classId
+                                                LEFT JOIN tblfeetype ON tblfeetype.Id = tblfeepayment.feeTypeId
+                                                LEFT JOIN tblfees ON tblfees.fee_id = tblfeepayment.feeId 
                                                 GROUP BY tblfeepayment.studentId,tblsession.sessionName,tbllevel.levelName");
                                             }
                                                 
@@ -354,7 +354,7 @@ function showLecturer(str) {
                                                     
                                                     
                                                     <td style="display: flex; align-items:center;justify-content:center">
-                                                        <button style="width: 100%;" class="btn "><a width="100%" title="Print student fee" href="printFee.php?Id=<?php echo $row['Id'];?>&studentId=<?php echo $row['studentId'];?>&year=<?php echo $row["sessionName"] ?>&level=<?php echo $row["levelName"] ?>" ><i class="fa fa-print fa-1x"></i> </a></button>
+                                                        <button style="width: 100%;" class="btn "><a width="100%" title="Print student fee rport" href="printFee.php?Id=<?php echo $row['Id'];?>&studentId=<?php echo $row['studentId'];?>&year=<?php echo $row["sessionName"] ?>&level=<?php echo $row["levelName"] ?>" ><i class="fa fa-print fa-1x"></i> </a></button>
                                                     <!-- <hr> -->
                                                     <span style="width: 10px; height: 100%; background-color:red; z-index:99"></span>
                                                     <button style="width: 100%;" class="btn" ><a title="Edit student fee" href="editFees.php?Id=<?php echo $row['Id'];?>&studentId=<?php echo $row['studentId'];?>&year=<?php echo $row["sessionName"] ?>&level=<?php echo $row["levelName"] ?>"><i class="fa fa-edit fa-1x"></i> </a></button>

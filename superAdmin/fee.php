@@ -3,12 +3,12 @@
 
     include('../includes/dbconnection.php');
     include('../includes/session.php');
-    error_reporting(0);
-
+    // error_reporting(0);
+    $statusMsg="";
     if(isset($_POST['submit'])){
 
      $alertStyle ="";
-      $statusMsg="";
+      
 
     $termId = $_POST['termId'];
     $feeType = $_POST['feeNameId'];
@@ -234,7 +234,7 @@ function showLecturer(str) {
                                                             $query=mysqli_query($con,"SELECT * FROM tblfeetype");                        
                                                             $count = mysqli_num_rows($query);
                                                             if($count > 0){                       
-                                                                echo ' <select required id="" name="feeNameId" class="custom-select form-control">';
+                                                                echo ' <select required id="feeType" name="feeNameId" class="custom-select form-control">';
                                                                 echo'<option value="">--Select Level--</option>';
                                                                 while ($row = mysqli_fetch_array($query)) {
                                                                 echo'<option value="'.$row['Id'].'" >'.$row['feeName'].'</option>';
@@ -251,7 +251,7 @@ function showLecturer(str) {
                                                     <?php  
                                                         $sql = mysqli_query($con, "SELECT * FROM tblsession WHERE isActive='1'");
                                                         echo '
-                                                            <select required name="sessionId" onchange="showValues(this.value)" class="custom-select form-control">';
+                                                            <select required name="sessionId" class="custom-select form-control">';
                                                         echo'<option value="">--Select Session--</option>
                                                             ';
                                                         while($session_row = mysqli_fetch_array($sql)){
@@ -374,41 +374,49 @@ function showLecturer(str) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      
                                         <?php
-                                        $ret=mysqli_query($con,"SELECT * FROM tblfees");
-                                        $qry = mysqli_query($con,"SELECT tblfees.fee_id,tblfees.feeMonth,tblterm.termName,tblfees.termId,tblsession.sessionName,tblfees.level,tblfees.fee_amount,tblfees.reg_date,tblfeetype.feeName
+                                        // Correct query with LEFT JOINs
+                                        $qry = mysqli_query($con, "
+                                        SELECT 
+                                            tblfees.fee_id,
+                                            tblfees.feeMonth,
+                                            tblterm.termName,
+                                            tblfees.termId,
+                                            tblsession.sessionName,
+                                            tblfees.level,
+                                            tblfees.fee_amount,
+                                            tblfees.reg_date,
+                                            tblfeetype.feeName
                                         FROM tblfees 
-                                        JOIN tblterm ON tblterm.id = tblfees.termId 
-                                        JOIN tblfeetype ON tblfeetype.Id = tblfees.feeNameId 
-                                        JOIN tblsession ON tblsession.Id = tblfees.sessionId");
+                                        LEFT JOIN tblterm ON tblterm.id = tblfees.termId 
+                                        LEFT JOIN tblfeetype ON tblfeetype.Id = tblfees.feeNameId 
+                                        LEFT JOIN tblsession ON tblsession.Id = tblfees.sessionId
+                                        ");
 
-                                        $cnt=1;
-                                        while ($row=mysqli_fetch_array($qry)) {
-                                            
-
-                                            
-                                                            ?>
-                                                
-                                                <tr>
-                                                <td><?php echo $cnt;?></td>
-                                                <td><?php  echo $row['feeName'];?></td>
-                                                <td><?php  echo $row['termName'];?></td>
-                                                <td><?php  echo $row['feeMonth'];?></td>
-                                                <td><?php  echo $row['sessionName'];?></td>
-                                                <td><?php  echo $row['level'];?></td>
-                                                <td><?php  echo "GHS " . formatMoney($row['fee_amount'],true);?></td>
-                                                <td><?php  echo $row['reg_date'];?></td>
-                                                
-                                                <td><a href="editFee.php?editFeeId=<?php echo $row['fee_id'];?>" title="Edit Details"><i class="fa fa-edit fa-1x"></i></a>
-                                                </td>
-                                                </tr>
-                                                <?php 
-                                            
-                                                $cnt=$cnt+1;
-                                                }?>
-                                                                                
+                                        $cnt = 1;
+                                        while ($row = mysqli_fetch_array($qry)) {
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $cnt; ?></td>
+                                            <td><?php echo !empty($row['feeName']) ? $row['feeName'] : 'N/A'; ?></td>
+                                            <td><?php echo !empty($row['termName']) ? $row['termName'] : 'N/A'; ?></td>
+                                            <td><?php echo !empty($row['feeMonth']) ? $row['feeMonth'] : 'N/A'; ?></td>
+                                            <td><?php echo !empty($row['sessionName']) ? $row['sessionName'] : 'N/A'; ?></td>
+                                            <td><?php echo !empty($row['level']) ? $row['level'] : 'N/A'; ?></td>
+                                            <td><?php echo !empty($row['fee_amount']) ? "GHS " . formatMoney($row['fee_amount'], true) : 'N/A'; ?></td>
+                                            <td><?php echo !empty($row['reg_date']) ? $row['reg_date'] : 'N/A'; ?></td>
+                                            <td>
+                                                <a href="editFee.php?editFeeId=<?php echo $row['fee_id']; ?>" title="Edit Details">
+                                                    <i class="fa fa-edit fa-1x"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php 
+                                        $cnt++;
+                                        } 
+                                        ?>
                                     </tbody>
+
                                 </table>
                                 </div>
                                 
@@ -432,6 +440,14 @@ function showLecturer(str) {
             $(".term").hide();
             $(".month").hide();
           $('#bootstrap-data-table-export').DataTable();
+
+
+
+          $(document).on('change', '#feeType', (e) => {
+            const feeTypeId = e.target.value;
+            ShowRequiredFields();
+            
+          })
       } );
 
       // Menu Trigger
@@ -451,28 +467,43 @@ function showLecturer(str) {
                 
             }); 
 
-      $("#level").change(function (e) { 
-        
+    
+    function ShowRequiredFields (){
+        const level = $("#level").val();
+        const feeTypeId = $("#feeType").val();
+       console.log(feeTypeId);
        
-        if($("#level").val() == ""){
+        if( level == ""){
             $(".term").hide();
             $("#term").removeAttr("required");
 
             $(".month").hide();
             $("#month").removeAttr("required",true);
-        }else if($("#level").val() == "Primary"){
+        }else if(level == "Primary" && feeTypeId != 4){
             $(".month").hide();
             $("#month").removeAttr("required",true);
 
             $(".term").show();
             $("#term").attr("required",true);
-        }else{
+        }else if( (level == "KG" || level == "Creche" || level == "Nursery") && feeTypeId != 4 ){
+            console.log('feetype', feeTypeId);
+            
             $(".term").show();
             $("#term").attr("required");
 
             $(".month").show();
             $("#month").attr("required",true);
+        }else{
+            $(".term").hide();
+            $("#term").removeAttr("required", true);
+
+            $(".month").hide();
+            $("#month").removeAttr("required", true);
         }
+    }
+
+      $("#level").change(function (e) { 
+        ShowRequiredFields();
 
         // if($("#level").val() == ""){
         //     $(".term").hide();

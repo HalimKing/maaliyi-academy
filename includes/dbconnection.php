@@ -118,6 +118,6 @@ if(mysqli_connect_errno()){
 // }
 
 
-?><!-- Log on to codeastro.com for more projects! -->
+?>
 
 
